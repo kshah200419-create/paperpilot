@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/test</id>
+  <title>arXiv Query: search_query=cat:cs.CL</title>
+  <updated>2026-10-02T00:00:00Z</updated>
+  <opensearch:itemsPerPage>3</opensearch:itemsPerPage>
+  <opensearch:totalResults>3</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2610.00003v2</id>
+    <title>Retrieval-Augmented Generation
+      with   Citation Grounding</title>
+    <updated>2026-10-01T12:00:00Z</updated>
+    <link href="https://arxiv.org/abs/2610.00003v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.00003v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Large language models hallucinate when answering questions about scientific literature. We
+      study retrieval-augmented generation (RAG) that grounds every generated sentence in retrieved
+      passages and emits inline citations. Our system combines sparse BM25 retrieval with dense
+      embeddings using reciprocal rank fusion. Experiments on three benchmarks show that citation
+      precision improves by 12 points over a dense-only baseline.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.IR" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-30T17:00:00Z</published>
+    <arxiv:comment>12 pages, 4 figures</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author><name>Ada Lovelace</name></author>
+    <author><name>Alan Turing</name></author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.00002v1</id>
+    <title>Graph Neural Networks for Molecule Property Prediction</title>
+    <updated>2026-09-29T10:00:00Z</updated>
+    <link href="https://arxiv.org/abs/2610.00002v1" rel="alternate" type="text/html"/>
+    <summary>We present a message passing graph neural network for predicting molecular properties. The
+      model uses equivariant layers and attention over atom neighbourhoods. On standard quantum
+      chemistry benchmarks it reduces mean absolute error compared with prior graph networks, while
+      training twice as fast on a single GPU.</summary>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-29T10:00:00Z</published>
+    <arxiv:primary_category term="cs.LG"/>
+    <arxiv:doi>10.1000/example.doi</arxiv:doi>
+    <author><name>Grace Hopper</name></author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/hep-th/9901001v1</id>
+    <title>An Old-Style Identifier Paper</title>
+    <updated>1999-01-01T00:00:00Z</updated>
+    <link href="http://arxiv.org/abs/hep-th/9901001v1" rel="alternate" type="text/html"/>
+    <summary>Short.</summary>
+    <category term="hep-th" scheme="http://arxiv.org/schemas/atom"/>
+    <published>1999-01-01T00:00:00Z</published>
+    <author><name>Old Author</name></author>
+  </entry>
+</feed>
