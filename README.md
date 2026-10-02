@@ -4,7 +4,7 @@
 
 **An AI research assistant for arXiv: ingest papers, search them with hybrid retrieval, ask grounded questions with citations, and track research trends.**
 
-[![CI](https://github.com/OWNER/paperpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/paperpilot/actions/workflows/ci.yml)
+[![CI](https://github.com/kshah200419-create/paperpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/kshah200419-create/paperpilot/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-strict-3178C6?logo=typescript&logoColor=white)
 ![Postgres](https://img.shields.io/badge/postgres-17%20%2B%20pgvector-4169E1?logo=postgresql&logoColor=white)

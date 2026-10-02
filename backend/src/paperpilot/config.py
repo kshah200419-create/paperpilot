@@ -61,7 +61,7 @@ class Settings(BaseSettings):
     arxiv_delay_seconds: float = Field(default=3.0, description="arXiv asks for >=3s between calls")
     arxiv_max_retries: int = 4
     arxiv_page_size: int = 100
-    arxiv_user_agent: str = "PaperPilot/0.1 (research-assistant demo; mailto:dev@example.com)"
+    arxiv_user_agent: str = "PaperPilot/0.1 (research-assistant demo; +https://github.com/kshah200419-create/paperpilot)"
     chunk_max_words: int = 90
     chunk_overlap_sentences: int = 1
 
