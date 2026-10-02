@@ -74,3 +74,10 @@ def test_settings_parse_cors_list() -> None:
         Settings(database_url="postgresql+asyncpg://u@h/d").sync_database_url
         == "postgresql://u@h/d"
     )
+
+
+def test_settings_parse_comma_separated_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("CORS_ORIGINS", "http://localhost:8080,http://localhost:5173")
+    assert Settings().cors_origins == ["http://localhost:8080", "http://localhost:5173"]
+    monkeypatch.setenv("CORS_ORIGINS", '["http://x.dev"]')
+    assert Settings().cors_origins == ["http://x.dev"]

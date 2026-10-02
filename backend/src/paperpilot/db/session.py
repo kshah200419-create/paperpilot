@@ -15,6 +15,9 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.pool import NullPool
 
 from paperpilot.config import Settings, get_settings
+from paperpilot.logs import get_logger
+
+log = get_logger(__name__)
 
 _engine: AsyncEngine | None = None
 _sessionmaker: async_sessionmaker[AsyncSession] | None = None
@@ -75,5 +78,6 @@ async def ping() -> bool:
         async with get_engine().connect() as conn:
             await conn.execute(text("SELECT 1"))
         return True
-    except Exception:
+    except Exception as exc:
+        log.warning("db.ping_failed", error=f"{type(exc).__name__}: {exc}"[:300])
         return False

@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import json
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 EmbedderName = Literal["auto", "fastembed", "hashing"]
 LLMProviderName = Literal["auto", "openai", "ollama", "extractive"]
@@ -28,7 +29,8 @@ class Settings(BaseSettings):
     )
     log_level: str = "INFO"
     log_json: bool = False
-    cors_origins: list[str] = Field(
+    # NoDecode: accept a plain comma-separated env value instead of requiring JSON.
+    cors_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: ["http://localhost:5173", "http://localhost:8080"]
     )
     admin_token: str | None = Field(
@@ -66,7 +68,9 @@ class Settings(BaseSettings):
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _split_origins(cls, value: object) -> object:
-        if isinstance(value, str) and not value.strip().startswith("["):
+        if isinstance(value, str):
+            if value.strip().startswith("["):
+                return json.loads(value)
             return [v.strip() for v in value.split(",") if v.strip()]
         return value
 
