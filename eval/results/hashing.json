@@ -14,7 +14,7 @@
       "recall@10": 0.9306,
       "mrr@10": 0.9252,
       "ndcg@10": 0.9052,
-      "p50_latency_ms": 3.3
+      "p50_latency_ms": 7.2
     },
     {
       "system": "vector (pgvector)",
@@ -22,15 +22,15 @@
       "recall@10": 0.8092,
       "mrr@10": 0.7245,
       "ndcg@10": 0.7242,
-      "p50_latency_ms": 2.7
+      "p50_latency_ms": 9.6
     },
     {
       "system": "hybrid (RRF)",
-      "recall@5": 0.85,
+      "recall@5": 0.8296,
       "recall@10": 0.9,
-      "mrr@10": 0.8658,
-      "ndcg@10": 0.8328,
-      "p50_latency_ms": 7.2
+      "mrr@10": 0.8647,
+      "ndcg@10": 0.8317,
+      "p50_latency_ms": 16.6
     }
   ],
   "results_by_kind": {
@@ -41,7 +41,7 @@
         "recall@10": 0.975,
         "mrr@10": 0.9417,
         "ndcg@10": 0.95,
-        "p50_latency_ms": 3.5
+        "p50_latency_ms": 7.3
       },
       {
         "system": "vector (pgvector)",
@@ -49,15 +49,15 @@
         "recall@10": 0.875,
         "mrr@10": 0.7488,
         "ndcg@10": 0.7783,
-        "p50_latency_ms": 2.7
+        "p50_latency_ms": 10.7
       },
       {
         "system": "hybrid (RRF)",
-        "recall@5": 0.925,
+        "recall@5": 0.9,
         "recall@10": 0.975,
-        "mrr@10": 0.8482,
-        "ndcg@10": 0.8784,
-        "p50_latency_ms": 6.6
+        "mrr@10": 0.8467,
+        "ndcg@10": 0.8771,
+        "p50_latency_ms": 16.6
       }
     ],
     "topical": [
@@ -67,7 +67,7 @@
         "recall@10": 0.7333,
         "mrr@10": 0.8519,
         "ndcg@10": 0.7062,
-        "p50_latency_ms": 2.7
+        "p50_latency_ms": 7.1
       },
       {
         "system": "vector (pgvector)",
@@ -75,7 +75,7 @@
         "recall@10": 0.5167,
         "mrr@10": 0.6167,
         "ndcg@10": 0.4839,
-        "p50_latency_ms": 2.6
+        "p50_latency_ms": 8.5
       },
       {
         "system": "hybrid (RRF)",
@@ -83,7 +83,7 @@
         "recall@10": 0.5667,
         "mrr@10": 0.9444,
         "ndcg@10": 0.6299,
-        "p50_latency_ms": 10.7
+        "p50_latency_ms": 19.1
       }
     ]
   },
@@ -111,7 +111,7 @@
     "k05": {
       "keyword (Postgres FTS)": 0.5,
       "vector (pgvector)": 0.0,
-      "hybrid (RRF)": 0.3869
+      "hybrid (RRF)": 0.3333
     },
     "k06": {
       "keyword (Postgres FTS)": 0.5,

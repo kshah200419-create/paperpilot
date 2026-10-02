@@ -14,7 +14,7 @@
       "recall@10": 0.9306,
       "mrr@10": 0.9252,
       "ndcg@10": 0.9052,
-      "p50_latency_ms": 6.9
+      "p50_latency_ms": 7.7
     },
     {
       "system": "vector (pgvector)",
@@ -22,7 +22,7 @@
       "recall@10": 0.9878,
       "mrr@10": 0.9723,
       "ndcg@10": 0.9589,
-      "p50_latency_ms": 11.9
+      "p50_latency_ms": 15.9
     },
     {
       "system": "hybrid (RRF)",
@@ -30,7 +30,7 @@
       "recall@10": 0.9673,
       "mrr@10": 0.966,
       "ndcg@10": 0.947,
-      "p50_latency_ms": 19.2
+      "p50_latency_ms": 24.5
     },
     {
       "system": "hybrid + cross-encoder rerank",
@@ -38,7 +38,7 @@
       "recall@10": 0.9612,
       "mrr@10": 0.9395,
       "ndcg@10": 0.9313,
-      "p50_latency_ms": 255.6
+      "p50_latency_ms": 366.1
     }
   ],
   "results_by_kind": {
@@ -49,7 +49,7 @@
         "recall@10": 0.975,
         "mrr@10": 0.9417,
         "ndcg@10": 0.95,
-        "p50_latency_ms": 6.6
+        "p50_latency_ms": 7.8
       },
       {
         "system": "vector (pgvector)",
@@ -57,7 +57,7 @@
         "recall@10": 1.0,
         "mrr@10": 0.9661,
         "ndcg@10": 0.9741,
-        "p50_latency_ms": 12.0
+        "p50_latency_ms": 17.3
       },
       {
         "system": "hybrid (RRF)",
@@ -65,7 +65,7 @@
         "recall@10": 1.0,
         "mrr@10": 0.9708,
         "ndcg@10": 0.9783,
-        "p50_latency_ms": 19.5
+        "p50_latency_ms": 24.8
       },
       {
         "system": "hybrid + cross-encoder rerank",
@@ -73,7 +73,7 @@
         "recall@10": 1.0,
         "mrr@10": 0.9625,
         "ndcg@10": 0.9715,
-        "p50_latency_ms": 272.6
+        "p50_latency_ms": 367.8
       }
     ],
     "topical": [
@@ -83,7 +83,7 @@
         "recall@10": 0.7333,
         "mrr@10": 0.8519,
         "ndcg@10": 0.7062,
-        "p50_latency_ms": 7.3
+        "p50_latency_ms": 7.4
       },
       {
         "system": "vector (pgvector)",
@@ -91,7 +91,7 @@
         "recall@10": 0.9333,
         "mrr@10": 1.0,
         "ndcg@10": 0.8911,
-        "p50_latency_ms": 10.8
+        "p50_latency_ms": 14.4
       },
       {
         "system": "hybrid (RRF)",
@@ -99,7 +99,7 @@
         "recall@10": 0.8222,
         "mrr@10": 0.9444,
         "ndcg@10": 0.8081,
-        "p50_latency_ms": 18.7
+        "p50_latency_ms": 24.5
       },
       {
         "system": "hybrid + cross-encoder rerank",
@@ -107,7 +107,7 @@
         "recall@10": 0.7889,
         "mrr@10": 0.837,
         "ndcg@10": 0.7522,
-        "p50_latency_ms": 231.7
+        "p50_latency_ms": 365.5
       }
     ]
   },
