@@ -204,7 +204,9 @@ async def ingest_from_arxiv(
         max_retries=settings.arxiv_max_retries,
         user_agent=settings.arxiv_user_agent,
     )
-    total = IngestStats(extra={"source_key": source_key, "watermark": str(watermark)})
+    total = IngestStats(
+        extra={"source_key": source_key, "watermark": watermark.isoformat() if watermark else None}
+    )
     newest: datetime | None = state.last_published_at if state else None
     try:
         async for page in client.iter_papers(search_query, max_results, settings.arxiv_page_size):
