@@ -47,6 +47,23 @@ def db_upgrade(revision: str = "head") -> None:
     typer.echo(f"database upgraded to {revision}")
 
 
+@db_app.command("wait")
+def db_wait(timeout: float = 60.0) -> None:
+    """Block until the database accepts connections (used by the Docker entrypoint)."""
+    import time
+
+    from paperpilot.db.session import ping
+
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if _run(ping()):
+            typer.echo("database is up")
+            return
+        time.sleep(1.0)
+    typer.echo("database not reachable", err=True)
+    raise typer.Exit(1)
+
+
 @db_app.command("downgrade")
 def db_downgrade(revision: str = "base") -> None:
     """Revert Alembic migrations."""
@@ -106,12 +123,16 @@ def seed(
         Path | None, typer.Option(help="JSON fixture (defaults to bundled sample)")
     ] = None,
     topics: Annotated[bool, typer.Option(help="Rebuild topics afterwards")] = True,
-    k: Annotated[int | None, typer.Option(help="Number of topics (default: silhouette)")] = None,
+    k: Annotated[int | None, typer.Option(help="Number of topics (default: auto)")] = None,
+    if_empty: Annotated[bool, typer.Option(help="Only seed when no papers exist yet")] = False,
 ) -> None:
     """Load the bundled offline sample dataset (idempotent)."""
     _setup()
 
     async def go() -> dict[str, Any]:
+        from sqlalchemy import func, select
+
+        from paperpilot.db.models import Paper
         from paperpilot.db.session import get_sessionmaker
         from paperpilot.ingest.pipeline import ingest_fixture
         from paperpilot.ml.embeddings import build_embedder
@@ -119,6 +140,11 @@ def seed(
 
         s = get_settings()
         sm = get_sessionmaker()
+        if if_empty:
+            async with sm() as session:
+                existing = (await session.execute(select(func.count(Paper.id)))).scalar_one()
+            if existing:
+                return {"skipped": f"database already has {existing} papers"}
         stats = (await ingest_fixture(sm, build_embedder(s), s, path)).as_dict()
         if topics:
             async with sm() as session, session.begin():
@@ -130,7 +156,7 @@ def seed(
 
 @app.command("topics")
 def topics_cmd(
-    k: Annotated[int | None, typer.Option(help="Number of topics (default: silhouette)")] = None,
+    k: Annotated[int | None, typer.Option(help="Number of topics (default: auto)")] = None,
 ) -> None:
     """(Re)build topic clusters and labels."""
     _setup()
