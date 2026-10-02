@@ -13,12 +13,16 @@ async def summaries(session: AsyncSession, papers: Sequence[Paper]) -> list[Pape
     """Serialise papers, attaching their topic label in one extra query."""
     ids = [p.id for p in papers]
     topic_rows = (
-        await session.execute(
-            select(PaperTopic.paper_id, Topic.id, Topic.label)
-            .join(Topic, Topic.id == PaperTopic.topic_id)
-            .where(PaperTopic.paper_id.in_(ids))
-        )
-    ).all() if ids else []
+        (
+            await session.execute(
+                select(PaperTopic.paper_id, Topic.id, Topic.label)
+                .join(Topic, Topic.id == PaperTopic.topic_id)
+                .where(PaperTopic.paper_id.in_(ids))
+            )
+        ).all()
+        if ids
+        else []
+    )
     topics = {r[0]: (r[1], r[2]) for r in topic_rows}
     out = []
     for p in papers:

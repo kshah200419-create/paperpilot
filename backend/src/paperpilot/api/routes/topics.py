@@ -25,14 +25,27 @@ async def topics(session: Session) -> list[TopicOut]:
 async def topic_map(session: Session) -> list[TopicPoint]:
     rows = (
         await session.execute(
-            select(Paper.id, Paper.arxiv_id, Paper.title, Paper.published_at,
-                   PaperTopic.topic_id, PaperTopic.x, PaperTopic.y)
-            .join(PaperTopic, PaperTopic.paper_id == Paper.id)
+            select(
+                Paper.id,
+                Paper.arxiv_id,
+                Paper.title,
+                Paper.published_at,
+                PaperTopic.topic_id,
+                PaperTopic.x,
+                PaperTopic.y,
+            ).join(PaperTopic, PaperTopic.paper_id == Paper.id)
         )
     ).all()
     return [
-        TopicPoint(paper_id=r[0], arxiv_id=r[1], title=r[2], published_at=r[3],
-                   topic_id=r[4], x=r[5], y=r[6])
+        TopicPoint(
+            paper_id=r[0],
+            arxiv_id=r[1],
+            title=r[2],
+            published_at=r[3],
+            topic_id=r[4],
+            x=r[5],
+            y=r[6],
+        )
         for r in rows
     ]
 

@@ -15,7 +15,7 @@ from typing import Literal
 
 import numpy as np
 import numpy.typing as npt
-from sqlalchemy import Select, func, select, text
+from sqlalchemy import ColumnElement, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from paperpilot.config import Settings
@@ -82,14 +82,15 @@ def to_or_tsquery(query: str, max_terms: int = 32) -> str:
     return " | ".join(tokens[:max_terms])
 
 
-def _apply_filters(stmt: Select[tuple[int, int, float]], f: SearchFilters) -> Select[tuple[int, int, float]]:
+def _filter_clauses(f: SearchFilters) -> list[ColumnElement[bool]]:
+    clauses: list[ColumnElement[bool]] = []
     if f.categories:
-        stmt = stmt.where(Paper.categories.overlap(list(f.categories)))
+        clauses.append(Paper.categories.overlap(list(f.categories)))
     if f.date_from:
-        stmt = stmt.where(Paper.published_at >= f.date_from)
+        clauses.append(Paper.published_at >= f.date_from)
     if f.date_to:
-        stmt = stmt.where(Paper.published_at <= f.date_to)
-    return stmt
+        clauses.append(Paper.published_at <= f.date_to)
+    return clauses
 
 
 async def keyword_chunks(
@@ -101,12 +102,13 @@ async def keyword_chunks(
     tsq = func.to_tsquery("english", tsq_text)
     # normalization 1: divide by 1 + log(document length)
     rank = func.ts_rank(Chunk.tsv, tsq, 1).label("score")
-    stmt: Select[tuple[int, int, float]] = (
+    stmt = (
         select(Chunk.id, Chunk.paper_id, rank)
         .join(Paper, Paper.id == Chunk.paper_id)
-        .where(Chunk.tsv.op("@@")(tsq))
+        .where(Chunk.tsv.op("@@")(tsq), *_filter_clauses(filters))
+        .order_by(rank.desc(), Chunk.id)
+        .limit(limit)
     )
-    stmt = _apply_filters(stmt, filters).order_by(rank.desc(), Chunk.id).limit(limit)
     rows = (await session.execute(stmt)).all()
     return [ChunkHit(r[0], r[1], float(r[2])) for r in rows]
 
@@ -123,12 +125,13 @@ async def vector_chunks(
     if filters != SearchFilters():
         await session.execute(text("SET LOCAL hnsw.iterative_scan = strict_order"))
     dist = Chunk.embedding.cosine_distance(query_vec.tolist())
-    stmt: Select[tuple[int, int, float]] = (
+    stmt = (
         select(Chunk.id, Chunk.paper_id, (1 - dist).label("score"))
         .join(Paper, Paper.id == Chunk.paper_id)
-        .where(Chunk.embedding.is_not(None))
+        .where(Chunk.embedding.is_not(None), *_filter_clauses(filters))
+        .order_by(dist)
+        .limit(limit)
     )
-    stmt = _apply_filters(stmt, filters).order_by(dist).limit(limit)
     rows = (await session.execute(stmt)).all()
     return [ChunkHit(r[0], r[1], float(r[2])) for r in rows]
 
@@ -152,8 +155,13 @@ class HybridSearcher:
         self.reranker = reranker
 
     async def _candidates(
-        self, session: AsyncSession, query: str, mode: SearchMode, filters: SearchFilters,
-        pool: int, timings: dict[str, float],
+        self,
+        session: AsyncSession,
+        query: str,
+        mode: SearchMode,
+        filters: SearchFilters,
+        pool: int,
+        timings: dict[str, float],
     ) -> tuple[list[ChunkHit], list[ChunkHit]]:
         kw: list[ChunkHit] = []
         vec: list[ChunkHit] = []
@@ -218,7 +226,9 @@ class HybridSearcher:
             timings["rerank_ms"] = (time.perf_counter() - t0) * 1000
         return SearchOutcome(hits[:limit], (time.perf_counter() - start) * 1000, timings)
 
-    async def _rerank(self, session: AsyncSession, query: str, hits: list[PaperHit]) -> list[PaperHit]:
+    async def _rerank(
+        self, session: AsyncSession, query: str, hits: list[PaperHit]
+    ) -> list[PaperHit]:
         assert self.reranker is not None
         rows = (
             await session.execute(
@@ -249,7 +259,9 @@ class HybridSearcher:
         kw, vec = await self._candidates(
             session, query, "hybrid", filters, self.settings.candidate_pool, {}
         )
-        fused = rrf_fuse([[h.chunk_id for h in kw], [h.chunk_id for h in vec]], k=self.settings.rrf_k)
+        fused = rrf_fuse(
+            [[h.chunk_id for h in kw], [h.chunk_id for h in vec]], k=self.settings.rrf_k
+        )
         paper_of = {h.chunk_id: h.paper_id for h in (*kw, *vec)}
         chosen: list[tuple[int, float]] = []
         per: dict[int, int] = {}
@@ -282,7 +294,9 @@ async def headlines(session: AsyncSession, query: str, chunk_ids: Sequence[int])
         return {}
     tsq_text = to_or_tsquery(query)
     if not tsq_text:
-        rows = (await session.execute(select(Chunk.id, Chunk.text).where(Chunk.id.in_(chunk_ids)))).all()
+        rows = (
+            await session.execute(select(Chunk.id, Chunk.text).where(Chunk.id.in_(chunk_ids)))
+        ).all()
         return {r.id: r.text for r in rows}
     tsq = func.to_tsquery("english", tsq_text)
     stmt = select(Chunk.id, func.ts_headline("english", Chunk.text, tsq, HEADLINE_OPTS)).where(

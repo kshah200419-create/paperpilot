@@ -42,7 +42,11 @@ class LLMProvider(ABC):
 
 class OpenAIProvider(LLMProvider):
     def __init__(
-        self, api_key: str, model: str, base_url: str, timeout: float = 60.0,
+        self,
+        api_key: str,
+        model: str,
+        base_url: str,
+        timeout: float = 60.0,
         transport: httpx.AsyncBaseTransport | None = None,
     ) -> None:
         self.name = f"openai:{model}"
@@ -82,7 +86,10 @@ class OpenAIProvider(LLMProvider):
 
 class OllamaProvider(LLMProvider):
     def __init__(
-        self, host: str, model: str, timeout: float = 60.0,
+        self,
+        host: str,
+        model: str,
+        timeout: float = 60.0,
         transport: httpx.AsyncBaseTransport | None = None,
     ) -> None:
         self.name = f"ollama:{model}"
@@ -130,7 +137,10 @@ class ExtractiveProvider(LLMProvider):
     name = "extractive"
 
     def __init__(
-        self, embedder: Embedder, max_sentences: int = 4, mmr_lambda: float = 0.7,
+        self,
+        embedder: Embedder,
+        max_sentences: int = 4,
+        mmr_lambda: float = 0.7,
         token_delay: float = 0.012,
     ) -> None:
         self.embedder = embedder
@@ -162,10 +172,13 @@ class ExtractiveProvider(LLMProvider):
             rank_prior = 1.0 / (1.0 + 0.08 * (c.source - 1))
             c.score = (0.7 * float(sim) + 0.3 * overlap) * rank_prior
 
-        # Maximal Marginal Relevance to avoid near-duplicate sentences.
+        # Keep sentences reasonably close to the best one, then apply Maximal Marginal Relevance
+        # to avoid near-duplicates.
+        best_score = max(c.score for c in cands)
+        remaining = [i for i, c in enumerate(cands) if c.score >= 0.6 * best_score]
         chosen: list[int] = []
-        remaining = list(range(len(cands)))
         while remaining and len(chosen) < self.max_sentences:
+
             def mmr(i: int) -> float:
                 redundancy = max((float(s_vecs[i] @ s_vecs[j]) for j in chosen), default=0.0)
                 return self.mmr_lambda * cands[i].score - (1 - self.mmr_lambda) * redundancy
@@ -197,13 +210,17 @@ def build_provider(settings: Settings, embedder: Embedder) -> LLMProvider:
         if not settings.openai_api_key:
             raise ValueError("LLM_PROVIDER=openai requires OPENAI_API_KEY")
         return OpenAIProvider(
-            settings.openai_api_key, settings.openai_model, settings.openai_base_url,
+            settings.openai_api_key,
+            settings.openai_model,
+            settings.openai_base_url,
             settings.llm_timeout_seconds,
         )
     if choice == "ollama" or (choice == "auto" and settings.ollama_host):
         if not settings.ollama_host:
             raise ValueError("LLM_PROVIDER=ollama requires OLLAMA_HOST")
-        return OllamaProvider(settings.ollama_host, settings.ollama_model, settings.llm_timeout_seconds)
+        return OllamaProvider(
+            settings.ollama_host, settings.ollama_model, settings.llm_timeout_seconds
+        )
     return ExtractiveProvider(embedder)
 
 
@@ -212,4 +229,3 @@ _CITE = re.compile(r"\[(\d{1,2})\]")
 
 def cited_indices(answer: str) -> list[int]:
     return sorted({int(m) for m in _CITE.findall(answer)})
-

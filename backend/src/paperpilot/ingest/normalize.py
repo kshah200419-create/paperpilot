@@ -42,7 +42,9 @@ def normalize_paper(raw: RawPaper) -> CleanPaper:
     if primary not in categories:
         categories.insert(0, primary)
     return CleanPaper(
-        **raw.model_dump(exclude={"title", "abstract", "authors", "categories", "primary_category"}),
+        **raw.model_dump(
+            exclude={"title", "abstract", "authors", "categories", "primary_category"}
+        ),
         title=title,
         abstract=abstract,
         authors=authors,

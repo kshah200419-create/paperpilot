@@ -5,9 +5,9 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+from alembic import command
 from alembic.config import Config
 
-from alembic import command
 
 def _backend_root() -> Path:
     """Locate the directory holding ``alembic.ini`` (source checkout, Docker image, or CWD)."""

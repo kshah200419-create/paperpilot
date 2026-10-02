@@ -84,9 +84,7 @@ def parse_feed(xml_text: str) -> tuple[list[RawPaper], int]:
                 version=version,
                 title=title,
                 abstract=_text(entry.find(f"{ATOM}summary")),
-                authors=[
-                    _text(a.find(f"{ATOM}name")) for a in entry.findall(f"{ATOM}author")
-                ],
+                authors=[_text(a.find(f"{ATOM}name")) for a in entry.findall(f"{ATOM}author")],
                 categories=[c for c in categories if c],
                 primary_category=primary_category,
                 published_at=_parse_dt(_text(entry.find(f"{ATOM}published"))),
@@ -114,7 +112,7 @@ def build_search_query(
         parts.append(f"cat:{category}")
     if query:
         terms = " ".join(re.findall(r"[\w\-]+", query))
-        parts.append(f"all:\"{terms}\"" if " " in terms else f"all:{terms}")
+        parts.append(f'all:"{terms}"' if " " in terms else f"all:{terms}")
     if date_from or date_to:
         lo = (date_from or datetime(1991, 1, 1)).strftime("%Y%m%d%H%M")
         hi = (date_to or datetime(2100, 1, 1)).strftime("%Y%m%d%H%M")
@@ -184,10 +182,11 @@ class ArxivClient:
                 backoff = (
                     float(retry_after)
                     if retry_after and retry_after.isdigit()
-                    else min(120.0, self.backoff_base * 2 ** (attempt - 1))
-                    + random.uniform(0, 1)  # noqa: S311 - jitter, not crypto
+                    else min(120.0, self.backoff_base * 2 ** (attempt - 1)) + random.uniform(0, 1)  # noqa: S311 - jitter, not crypto
                 )
-                log.warning("arxiv.retry", attempt=attempt, backoff_s=round(backoff, 2), error=str(err))
+                log.warning(
+                    "arxiv.retry", attempt=attempt, backoff_s=round(backoff, 2), error=str(err)
+                )
                 await self._sleep(backoff)
 
     async def search(

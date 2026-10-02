@@ -35,13 +35,17 @@ async def list_papers(
     stmt = select(Paper)
     count = select(func.count()).select_from(Paper)
     if category:
-        stmt = stmt.where(Paper.categories.any(category))
-        count = count.where(Paper.categories.any(category))
+        stmt = stmt.where(Paper.categories.contains([category]))
+        count = count.where(Paper.categories.contains([category]))
     if topic_id is not None:
         stmt = stmt.join(PaperTopic).where(PaperTopic.topic_id == topic_id)
         count = count.join(PaperTopic).where(PaperTopic.topic_id == topic_id)
     order = Paper.published_at.desc() if sort == "newest" else Paper.published_at.asc()
-    rows = (await session.execute(stmt.order_by(order, Paper.id).limit(limit).offset(offset))).scalars().all()
+    rows = (
+        (await session.execute(stmt.order_by(order, Paper.id).limit(limit).offset(offset)))
+        .scalars()
+        .all()
+    )
     total = (await session.execute(count)).scalar_one()
     return PaperPage(items=await summaries(session, rows), total=total, limit=limit, offset=offset)
 
@@ -113,6 +117,10 @@ async def stats(session: Session) -> StatsOut:
     sub = select(func.unnest(Paper.categories).label("c")).subquery()
     cats = (await session.execute(select(func.count(func.distinct(sub.c.c))))).scalar_one()
     return StatsOut(
-        papers=papers, chunks=chunks, topics=topics, categories=cats,
-        first_published=first, last_published=last,
+        papers=papers,
+        chunks=chunks,
+        topics=topics,
+        categories=cats,
+        first_published=first,
+        last_published=last,
     )

@@ -42,8 +42,14 @@ async def list_jobs(
     session: Session, limit: Annotated[int, Query(ge=1, le=100)] = 20
 ) -> list[IngestJobOut]:
     rows = (
-        await session.execute(select(IngestJob).order_by(IngestJob.created_at.desc()).limit(limit))
-    ).scalars().all()
+        (
+            await session.execute(
+                select(IngestJob).order_by(IngestJob.created_at.desc()).limit(limit)
+            )
+        )
+        .scalars()
+        .all()
+    )
     return [IngestJobOut.model_validate(j) for j in rows]
 
 

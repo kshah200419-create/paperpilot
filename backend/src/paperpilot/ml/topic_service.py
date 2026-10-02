@@ -21,9 +21,9 @@ log = get_logger(__name__)
 async def rebuild_topics(session: AsyncSession, k: int | None = None) -> dict[str, Any]:
     rows = (
         await session.execute(
-            select(Paper.id, Paper.title, Paper.abstract, Paper.embedding).where(
-                Paper.embedding.is_not(None)
-            ).order_by(Paper.id)
+            select(Paper.id, Paper.title, Paper.abstract, Paper.embedding)
+            .where(Paper.embedding.is_not(None))
+            .order_by(Paper.id)
         )
     ).all()
     if len(rows) < 4:
@@ -101,7 +101,7 @@ async def monthly_trends(
     recent = slice(max(0, len(months) - 3), len(months))
     grand = sum(totals_per_month) or 1
     recent_total = sum(totals_per_month[recent]) or 1
-    series = []
+    series: list[dict[str, Any]] = []
     for key, c in counts.items():
         total = sum(c)
         share_all = total / grand

@@ -17,8 +17,8 @@ from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, CountVectorizer
 from sklearn.metrics import silhouette_score
 
-ACADEMIC_STOPWORDS = frozenset(
-    """paper propose proposed proposes approach approaches method methods methodology result
+_ACADEMIC_STOPWORDS_TEXT = """
+    paper propose proposed proposes approach approaches method methods methodology result
     results show shows shown demonstrate demonstrates achieve achieves achieved performance
     state art existing novel new framework based using use used task tasks experiments
     experimental extensive significantly significant improve improves improved improvement
@@ -27,8 +27,10 @@ ACADEMIC_STOPWORDS = frozenset(
     benchmark benchmarks large various different effective efficient address problem key
     furthermore however additionally moreover specifically finally including lack remains
     challenging challenge challenges limited high low better best leading learning paradigm
-    tested providing provide provides enable enables allowing allows et al ii iii""".split()
-)
+    tested providing provide provides enable enables allowing allows et al ii iii training
+    accuracy feature features robust local
+"""
+ACADEMIC_STOPWORDS = frozenset(_ACADEMIC_STOPWORDS_TEXT.split())
 
 
 @dataclass
@@ -41,7 +43,9 @@ class TopicModelResult:
     silhouette: float
 
 
-def choose_k(x: npt.NDArray[np.float32], k_min: int = 4, k_max: int = 14, seed: int = 42) -> tuple[int, float]:
+def choose_k(
+    x: npt.NDArray[np.float32], k_min: int = 4, k_max: int = 14, seed: int = 42
+) -> tuple[int, float]:
     """Pick k by cosine silhouette (embeddings are L2-normalised, so euclidean KMeans ≈ cosine)."""
     n = x.shape[0]
     k_max = max(k_min, min(k_max, n // 8))
@@ -56,13 +60,17 @@ def choose_k(x: npt.NDArray[np.float32], k_min: int = 4, k_max: int = 14, seed: 
     return best_k, best_s
 
 
-def ctfidf_keywords(docs: list[str], labels: npt.NDArray[np.int64], k: int, top_n: int = 8) -> list[list[str]]:
-    class_docs = [" ".join(d for d, lab in zip(docs, labels, strict=True) if lab == c) for c in range(k)]
+def ctfidf_keywords(
+    docs: list[str], labels: npt.NDArray[np.int64], k: int, top_n: int = 8
+) -> list[list[str]]:
+    class_docs = [
+        " ".join(d for d, lab in zip(docs, labels, strict=True) if lab == c) for c in range(k)
+    ]
     vectorizer = CountVectorizer(
         stop_words=list(ENGLISH_STOP_WORDS | ACADEMIC_STOPWORDS),
         ngram_range=(1, 2),
         min_df=1,
-        token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z\-]{2,}\b",
+        token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z\-]{2,}\b",  # noqa: S106
     )
     counts = vectorizer.fit_transform(class_docs).toarray().astype(np.float64)
     vocab = np.asarray(vectorizer.get_feature_names_out())
@@ -85,13 +93,22 @@ def ctfidf_keywords(docs: list[str], labels: npt.NDArray[np.int64], k: int, top_
     return out
 
 
+def heuristic_k(n: int, k_min: int = 4, k_max: int = 15) -> int:
+    """Size-based default: ~sqrt(n/5) clusters.
+
+    On dense sentence embeddings the silhouette curve is nearly flat (≈0.04-0.08 for k=4..16 on
+    the sample corpus) and always prefers the smallest k, which is too coarse for trend analysis.
+    """
+    return int(max(k_min, min(k_max, round((n / 5) ** 0.5))))
+
+
 def fit_topics(
     embeddings: npt.NDArray[np.float32], docs: list[str], k: int | None = None, seed: int = 42
 ) -> TopicModelResult:
     if embeddings.shape[0] < 4:
         raise ValueError("need at least 4 papers to build topics")
     if k is None:
-        k, sil = choose_k(embeddings, seed=seed)
+        k = heuristic_k(embeddings.shape[0])
     km = KMeans(n_clusters=k, n_init=10, random_state=seed).fit(embeddings)
     labels = km.labels_.astype(np.int64)
     sil = float(silhouette_score(embeddings, labels, metric="cosine")) if k > 1 else 0.0

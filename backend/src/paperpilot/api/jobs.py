@@ -9,7 +9,6 @@ from __future__ import annotations
 import asyncio
 import traceback
 import uuid
-from collections.abc import Awaitable, Callable
 from datetime import UTC, datetime
 from typing import Any
 
@@ -46,8 +45,11 @@ class JobRunner:
 
     async def submit(self, req: IngestJobCreate) -> IngestJob:
         job = IngestJob(
-            id=str(uuid.uuid4()), kind=req.kind, status="queued",
-            params=req.model_dump(), stats={},
+            id=str(uuid.uuid4()),
+            kind=req.kind,
+            status="queued",
+            params=req.model_dump(),
+            stats={},
         )
         async with get_sessionmaker()() as session, session.begin():
             session.add(job)
@@ -70,7 +72,9 @@ class JobRunner:
         try:
             stats = await self._dispatch(req)
             await self._set(job_id, status="succeeded", stats=stats, finished_at=_now())
-            log.info("job.succeeded", job_id=job_id, **{k: v for k, v in stats.items() if k != "extra"})
+            log.info(
+                "job.succeeded", job_id=job_id, **{k: v for k, v in stats.items() if k != "extra"}
+            )
         except Exception as exc:
             log.error("job.failed", job_id=job_id, error=str(exc), tb=traceback.format_exc())
             await self._set(job_id, status="failed", error=str(exc)[:2000], finished_at=_now())
@@ -79,23 +83,23 @@ class JobRunner:
         svc = get_services()
         sm = get_sessionmaker()
         stats: dict[str, Any] = {}
-        work: Callable[[], Awaitable[Any]] | None = None
         if req.kind == "arxiv":
             if not (req.category or req.query):
                 raise ValueError("arxiv jobs need a category or a query")
-
-            async def work() -> Any:
-                return await ingest_from_arxiv(
-                    sm, svc.embedder, svc.settings, category=req.category, query=req.query,
-                    max_results=req.max_results, full=req.full,
-                )
+            result = await ingest_from_arxiv(
+                sm,
+                svc.embedder,
+                svc.settings,
+                category=req.category,
+                query=req.query,
+                max_results=req.max_results,
+                full=req.full,
+            )
+            stats = result.as_dict()
         elif req.kind == "sample":
-            async def work() -> Any:
-                return await ingest_fixture(sm, svc.embedder, svc.settings)
-
-        if work is not None:
-            stats = (await work()).as_dict()
-        if req.kind == "topics" or (req.rebuild_topics and (stats.get("inserted") or stats.get("updated") or req.kind == "topics")):
+            stats = (await ingest_fixture(sm, svc.embedder, svc.settings)).as_dict()
+        changed = bool(stats.get("inserted") or stats.get("updated"))
+        if req.kind == "topics" or (req.rebuild_topics and changed):
             async with sm() as session, session.begin():
                 stats["topics"] = await rebuild_topics(session)
         return stats

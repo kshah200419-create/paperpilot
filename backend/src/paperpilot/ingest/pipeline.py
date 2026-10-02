@@ -50,8 +50,16 @@ class IngestStats:
     extra: dict[str, Any] = field(default_factory=dict)
 
     def merge(self, other: IngestStats) -> None:
-        for name in ("fetched", "invalid", "duplicates", "inserted", "updated", "unchanged",
-                     "chunks", "pages"):
+        for name in (
+            "fetched",
+            "invalid",
+            "duplicates",
+            "inserted",
+            "updated",
+            "unchanged",
+            "chunks",
+            "pages",
+        ):
             setattr(self, name, getattr(self, name) + getattr(other, name))
 
     def as_dict(self) -> dict[str, Any]:
@@ -123,7 +131,9 @@ async def ingest_papers(
         chunk_text(p.abstract, settings.chunk_max_words, settings.chunk_overlap_sentences)
         for p in todo
     ]
-    texts = [embedding_input(p.title, c.text) for p, cs in zip(todo, chunked, strict=True) for c in cs]
+    texts = [
+        embedding_input(p.title, c.text) for p, cs in zip(todo, chunked, strict=True) for c in cs
+    ]
     vectors = await asyncio.to_thread(embedder.embed_documents, texts)
 
     offset = 0
@@ -137,12 +147,12 @@ async def ingest_papers(
             "embedding": paper_vec.tolist(),
             "embedding_model": embedder.name,
         }
-        stmt = pg_insert(Paper).values(**values)
-        stmt = stmt.on_conflict_do_update(
+        insert_stmt = pg_insert(Paper).values(**values)
+        upsert = insert_stmt.on_conflict_do_update(
             index_elements=[Paper.arxiv_id],
-            set_={k: stmt.excluded[k] for k in values if k != "arxiv_id"},
+            set_={k: insert_stmt.excluded[k] for k in values if k != "arxiv_id"},
         ).returning(Paper.id)
-        paper_id = (await session.execute(stmt)).scalar_one()
+        paper_id = (await session.execute(upsert)).scalar_one()
         await session.execute(delete(Chunk).where(Chunk.paper_id == paper_id))
         session.add_all(
             Chunk(

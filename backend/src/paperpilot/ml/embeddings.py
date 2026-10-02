@@ -12,6 +12,7 @@ import math
 import threading
 from collections import Counter
 from collections.abc import Sequence
+from itertools import pairwise
 from typing import Protocol, runtime_checkable
 
 import numpy as np
@@ -39,7 +40,8 @@ class Embedder(Protocol):
 def _l2_normalize(m: Matrix) -> Matrix:
     norms = np.linalg.norm(m, axis=1, keepdims=True)
     norms[norms == 0] = 1.0
-    return (m / norms).astype(np.float32)
+    out: Matrix = (m / norms).astype(np.float32)
+    return out
 
 
 class HashingEmbedder:
@@ -55,7 +57,7 @@ class HashingEmbedder:
     def _features(self, text: str) -> Counter[str]:
         toks = tokenize(text)
         feats: Counter[str] = Counter(toks)
-        feats.update(f"{a}_{b}" for a, b in zip(toks, toks[1:], strict=False))
+        feats.update(f"{a}_{b}" for a, b in pairwise(toks))
         return feats
 
     def _vector(self, text: str) -> npt.NDArray[np.float32]:
@@ -73,7 +75,8 @@ class HashingEmbedder:
         return _l2_normalize(np.stack([self._vector(t) for t in texts]))
 
     def embed_query(self, text: str) -> npt.NDArray[np.float32]:
-        return self.embed_documents([text])[0]
+        out: npt.NDArray[np.float32] = self.embed_documents([text])[0]
+        return out
 
 
 class FastEmbedEmbedder:
@@ -101,7 +104,8 @@ class FastEmbedEmbedder:
     def embed_query(self, text: str) -> npt.NDArray[np.float32]:
         with self._lock:
             vec = next(iter(self._model.query_embed([text])))
-        return _l2_normalize(np.asarray([vec], dtype=np.float32))[0]
+        out: npt.NDArray[np.float32] = _l2_normalize(np.asarray([vec], dtype=np.float32))[0]
+        return out
 
 
 _cache: dict[tuple[str, str, int], Embedder] = {}

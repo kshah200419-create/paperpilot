@@ -39,14 +39,20 @@ async def main() -> None:
     ap.add_argument("--months", type=int, default=12)
     ap.add_argument("--per-window", type=int, default=20)
     ap.add_argument("--out", type=Path, default=OUT)
-    ap.add_argument("--cache-dir", type=Path, default=Path(".sample_cache"),
-                    help="per-window cache so an interrupted/rate-limited run can resume")
+    ap.add_argument(
+        "--cache-dir",
+        type=Path,
+        default=Path(".sample_cache"),
+        help="per-window cache so an interrupted/rate-limited run can resume",
+    )
     ap.add_argument("--delay", type=float, default=6.0)
     args = ap.parse_args()
 
     now = datetime.now(UTC)
     raws = []
-    async with ArxivClient(delay_seconds=args.delay, user_agent="PaperPilot-sample-builder/0.1") as client:
+    async with ArxivClient(
+        delay_seconds=args.delay, user_agent="PaperPilot-sample-builder/0.1"
+    ) as client:
         for start in month_starts(now, args.months):
             for day in (4, 17):  # two windows per month for a better spread
                 lo = start.replace(day=day)
@@ -59,8 +65,10 @@ async def main() -> None:
                 cats = " OR ".join(f"cat:{c}" for c in args.categories)
                 window = build_search_query(date_from=lo, date_to=hi)
                 papers, _ = await client.search(
-                    f"({cats}) AND {window}", max_results=args.per_window,
-                    sort_by="submittedDate", sort_order="ascending",
+                    f"({cats}) AND {window}",
+                    max_results=args.per_window,
+                    sort_by="submittedDate",
+                    sort_order="ascending",
                 )
                 print(f"{lo:%Y-%m-%d}: {len(papers)}", flush=True)
                 args.cache_dir.mkdir(parents=True, exist_ok=True)

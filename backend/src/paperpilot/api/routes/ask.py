@@ -43,8 +43,12 @@ def _sse(event: str, data: object) -> str:
     "/ask/stream",
     summary="Streamed answer (Server-Sent Events)",
     response_class=StreamingResponse,
-    responses={200: {"content": {"text/event-stream": {}}, "description": "SSE stream with "
-                     "`sources`, `token`*, then `done` (or `error`) events."}},
+    responses={
+        200: {
+            "content": {"text/event-stream": {}},
+            "description": "SSE stream with `sources`, `token`*, then `done` (or `error`) events.",
+        }
+    },
 )
 async def ask_stream(
     req: AskRequest, svc: Annotated[Services, Depends(get_services)]

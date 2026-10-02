@@ -88,7 +88,10 @@ async def stream_answer(
     yield AskEvent("sources", {"sources": [source_payload(s) for s in sources]})
 
     if not sources:
-        text = "I couldn't find any indexed papers relevant to this question. Try ingesting more papers or rephrasing."
+        text = (
+            "I couldn't find any indexed papers relevant to this question. "
+            "Try ingesting more papers or rephrasing."
+        )
         yield AskEvent("token", {"text": text})
         yield AskEvent("done", {"provider": provider.name, "cited": [], "took_ms": _ms(started)})
         return
@@ -129,6 +132,8 @@ async def answer_question(
     max_papers: int = 5,
 ) -> dict[str, Any]:
     """Non-streaming variant: collect the event stream into one JSON payload."""
+    if isinstance(provider, ExtractiveProvider):  # no artificial typing delay when not streaming
+        provider = ExtractiveProvider(provider.embedder, token_delay=0)
     out: dict[str, Any] = {"answer": "", "sources": [], "cited": [], "provider": provider.name}
     async for ev in stream_answer(session, searcher, provider, question, filters, max_papers):
         if ev.event == "sources":
