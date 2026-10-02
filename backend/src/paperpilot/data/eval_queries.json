@@ -1,0 +1,426 @@
+{
+ "meta": {
+  "description": "Hand-labelled queries over the bundled 480-paper sample. 'known-item' queries are paraphrases of one target paper written to avoid copying title wording; 'topical' queries list every paper in the sample judged relevant after a regex-assisted scan of titles/abstracts.",
+  "n_queries": 49
+ },
+ "queries": [
+  {
+   "id": "k01",
+   "kind": "known-item",
+   "query": "state space model for finding anomalies in hyperspectral imagery",
+   "relevant": [
+    "2602.04102"
+   ]
+  },
+  {
+   "id": "k02",
+   "kind": "known-item",
+   "query": "explainable scoring of how creative people are from their sketches",
+   "relevant": [
+    "2511.12880"
+   ]
+  },
+  {
+   "id": "k03",
+   "kind": "known-item",
+   "query": "optimizer that keeps LLM weight matrices low-rank so the model compresses better",
+   "relevant": [
+    "2603.03597"
+   ]
+  },
+  {
+   "id": "k04",
+   "kind": "known-item",
+   "query": "predicting deformation of excavation support walls with recurrent convolutional networks",
+   "relevant": [
+    "2606.05556"
+   ]
+  },
+  {
+   "id": "k05",
+   "kind": "known-item",
+   "query": "do reasoning models obey user constraints inside their chain of thought",
+   "relevant": [
+    "2510.15211"
+   ]
+  },
+  {
+   "id": "k06",
+   "kind": "known-item",
+   "query": "are pretrained forecasting models for temporal data calibrated",
+   "relevant": [
+    "2510.16060"
+   ]
+  },
+  {
+   "id": "k07",
+   "kind": "known-item",
+   "query": "GPU job scheduling for labeling corpora with a teacher LLM for distillation",
+   "relevant": [
+    "2608.15975"
+   ]
+  },
+  {
+   "id": "k08",
+   "kind": "known-item",
+   "query": "training several small LLM agents jointly without a central coordinator",
+   "relevant": [
+    "2605.05216"
+   ]
+  },
+  {
+   "id": "k09",
+   "kind": "known-item",
+   "query": "prototype-based interpretable classifier for multivariate sequential data",
+   "relevant": [
+    "2511.02152"
+   ]
+  },
+  {
+   "id": "k10",
+   "kind": "known-item",
+   "query": "survey of general-purpose pretrained models for medical image analysis",
+   "relevant": [
+    "2602.15913"
+   ]
+  },
+  {
+   "id": "k11",
+   "kind": "known-item",
+   "query": "compressing prompts by pruning a graph built from the input text",
+   "relevant": [
+    "2607.01241"
+   ]
+  },
+  {
+   "id": "k12",
+   "kind": "known-item",
+   "query": "point cloud classification with measure-theoretic descriptors and an autoencoder",
+   "relevant": [
+    "2510.15219"
+   ]
+  },
+  {
+   "id": "k13",
+   "kind": "known-item",
+   "query": "universal transformers with recurrence evaluated on cellular automata",
+   "relevant": [
+    "2609.19521"
+   ]
+  },
+  {
+   "id": "k14",
+   "kind": "known-item",
+   "query": "using rhetorical structure and coreference graphs to improve summarization",
+   "relevant": [
+    "2604.03583"
+   ]
+  },
+  {
+   "id": "k15",
+   "kind": "known-item",
+   "query": "telling friendly from aggressive interactions among cows using keypoint trajectories",
+   "relevant": [
+    "2512.14998"
+   ]
+  },
+  {
+   "id": "k16",
+   "kind": "known-item",
+   "query": "forecasting stock moves from emotions expressed in tweets with LLMs",
+   "relevant": [
+    "2510.03633"
+   ]
+  },
+  {
+   "id": "k17",
+   "kind": "known-item",
+   "query": "quickly measuring how wide road surface cracks are",
+   "relevant": [
+    "2511.02144"
+   ]
+  },
+  {
+   "id": "k18",
+   "kind": "known-item",
+   "query": "mapping the exchange interaction in silicon spin qubit devices",
+   "relevant": [
+    "2603.16025"
+   ]
+  },
+  {
+   "id": "k19",
+   "kind": "known-item",
+   "query": "LLM-assisted topic modeling as a measurement instrument for business research",
+   "relevant": [
+    "2603.03623"
+   ]
+  },
+  {
+   "id": "k20",
+   "kind": "known-item",
+   "query": "trajectory planning for drones carrying a payload on a cable through cluttered spaces",
+   "relevant": [
+    "2510.15226"
+   ]
+  },
+  {
+   "id": "k21",
+   "kind": "known-item",
+   "query": "re-identifying people from drone footage at very long range",
+   "relevant": [
+    "2601.01312"
+   ]
+  },
+  {
+   "id": "k22",
+   "kind": "known-item",
+   "query": "modeling the autonomy of marine multi-robot teams using a population census",
+   "relevant": [
+    "2511.02147"
+   ]
+  },
+  {
+   "id": "k23",
+   "kind": "known-item",
+   "query": "age of information when robot teams sense and deliver measurements over a graph",
+   "relevant": [
+    "2605.02107"
+   ]
+  },
+  {
+   "id": "k24",
+   "kind": "known-item",
+   "query": "touch-based peg-in-hole insertion that generalizes zero-shot to new connectors",
+   "relevant": [
+    "2603.03627"
+   ]
+  },
+  {
+   "id": "k25",
+   "kind": "known-item",
+   "query": "legged robot odometry fusing lidar, camera, IMU and leg kinematics",
+   "relevant": [
+    "2510.15220"
+   ]
+  },
+  {
+   "id": "k26",
+   "kind": "known-item",
+   "query": "data-driven decision making for logistics and operations management",
+   "relevant": [
+    "2609.10563"
+   ]
+  },
+  {
+   "id": "k27",
+   "kind": "known-item",
+   "query": "theory of the zero-temperature limit of softmax gating in mixture of experts",
+   "relevant": [
+    "2605.02124"
+   ]
+  },
+  {
+   "id": "k28",
+   "kind": "known-item",
+   "query": "learning interactive policies from human demonstrations via inverse game theory",
+   "relevant": [
+    "2511.12848"
+   ]
+  },
+  {
+   "id": "k29",
+   "kind": "known-item",
+   "query": "deterministic explainable tool for extracting price runs in equity markets",
+   "relevant": [
+    "2512.15008"
+   ]
+  },
+  {
+   "id": "k30",
+   "kind": "known-item",
+   "query": "bilingual benchmark probing cognitive levels of vision-language models",
+   "relevant": [
+    "2606.05531"
+   ]
+  },
+  {
+   "id": "k31",
+   "kind": "known-item",
+   "query": "reinforcement learning red teaming to defend LLMs against jailbreak rewrites",
+   "relevant": [
+    "2606.05523"
+   ]
+  },
+  {
+   "id": "k32",
+   "kind": "known-item",
+   "query": "long-term workplace emotion dataset collected with passive sensing",
+   "relevant": [
+    "2510.15221"
+   ]
+  },
+  {
+   "id": "k33",
+   "kind": "known-item",
+   "query": "video autoencoder latents designed for generation rather than reconstruction",
+   "relevant": [
+    "2605.02134"
+   ]
+  },
+  {
+   "id": "k34",
+   "kind": "known-item",
+   "query": "sample complexity of KL-regularized offline bandit learning",
+   "relevant": [
+    "2605.02141"
+   ]
+  },
+  {
+   "id": "k35",
+   "kind": "known-item",
+   "query": "detecting discrepancies between radiology reports of 3D scans",
+   "relevant": [
+    "2603.06681"
+   ]
+  },
+  {
+   "id": "k36",
+   "kind": "known-item",
+   "query": "information pricing: how a seller should sell data to a buyer",
+   "relevant": [
+    "2510.15214"
+   ]
+  },
+  {
+   "id": "k37",
+   "kind": "known-item",
+   "query": "generating interview questions from videos to elicit expert knowledge",
+   "relevant": [
+    "2512.15006"
+   ]
+  },
+  {
+   "id": "k38",
+   "kind": "known-item",
+   "query": "AI for prenatal detection of congenital heart disease from images and records",
+   "relevant": [
+    "2510.15208"
+   ]
+  },
+  {
+   "id": "k39",
+   "kind": "known-item",
+   "query": "recovering a federated model after poisoning attacks through unlearning",
+   "relevant": [
+    "2605.02110"
+   ]
+  },
+  {
+   "id": "k40",
+   "kind": "known-item",
+   "query": "normalizing flows for unsupervised anomaly detection on graphs beyond homophily",
+   "relevant": [
+    "2608.16018"
+   ]
+  },
+  {
+   "id": "t01",
+   "kind": "topical",
+   "query": "machine learning for financial market and price prediction",
+   "relevant": [
+    "2510.03633",
+    "2512.15008",
+    "2601.11880",
+    "2605.20192"
+   ]
+  },
+  {
+   "id": "t02",
+   "kind": "topical",
+   "query": "coordination of multi-robot teams",
+   "relevant": [
+    "2511.02147",
+    "2605.02107",
+    "2510.03592"
+   ]
+  },
+  {
+   "id": "t03",
+   "kind": "topical",
+   "query": "jailbreak and prompt injection attacks on large language models",
+   "relevant": [
+    "2603.03637",
+    "2604.08557",
+    "2606.05523",
+    "2601.02377"
+   ]
+  },
+  {
+   "id": "t04",
+   "kind": "topical",
+   "query": "efficient inference for mixture-of-experts language models",
+   "relevant": [
+    "2601.01310",
+    "2606.05538",
+    "2607.09686",
+    "2608.02989",
+    "2609.04575"
+   ]
+  },
+  {
+   "id": "t05",
+   "kind": "topical",
+   "query": "SLAM systems for robot localization and mapping",
+   "relevant": [
+    "2510.15220",
+    "2604.15612",
+    "2609.19518",
+    "2609.19533"
+   ]
+  },
+  {
+   "id": "t06",
+   "kind": "topical",
+   "query": "deep learning for brain MRI analysis",
+   "relevant": [
+    "2511.12853",
+    "2602.15315",
+    "2603.03618",
+    "2604.15611"
+   ]
+  },
+  {
+   "id": "t07",
+   "kind": "topical",
+   "query": "federated learning across distributed clients",
+   "relevant": [
+    "2602.04093",
+    "2602.15304",
+    "2602.15326",
+    "2605.02110",
+    "2605.02125"
+   ]
+  },
+  {
+   "id": "t08",
+   "kind": "topical",
+   "query": "detecting cognitive or neurological conditions from speech",
+   "relevant": [
+    "2606.05545",
+    "2606.05561",
+    "2606.18571",
+    "2601.11896"
+   ]
+  },
+  {
+   "id": "t09",
+   "kind": "topical",
+   "query": "generative models for time series forecasting",
+   "relevant": [
+    "2511.02137",
+    "2512.04385"
+   ]
+  }
+ ]
+}

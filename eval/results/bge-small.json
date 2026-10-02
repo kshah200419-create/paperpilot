@@ -1,0 +1,410 @@
+{
+  "k": 10,
+  "n_queries": 49,
+  "n_by_kind": {
+    "known-item": 40,
+    "topical": 9
+  },
+  "corpus_size": 480,
+  "embedder": "BAAI/bge-small-en-v1.5",
+  "results": [
+    {
+      "system": "keyword (Postgres FTS)",
+      "recall@5": 0.902,
+      "recall@10": 0.9306,
+      "mrr@10": 0.9252,
+      "ndcg@10": 0.9052,
+      "p50_latency_ms": 6.9
+    },
+    {
+      "system": "vector (pgvector)",
+      "recall@5": 0.9367,
+      "recall@10": 0.9878,
+      "mrr@10": 0.9723,
+      "ndcg@10": 0.9589,
+      "p50_latency_ms": 11.9
+    },
+    {
+      "system": "hybrid (RRF)",
+      "recall@5": 0.9469,
+      "recall@10": 0.9673,
+      "mrr@10": 0.966,
+      "ndcg@10": 0.947,
+      "p50_latency_ms": 19.2
+    },
+    {
+      "system": "hybrid + cross-encoder rerank",
+      "recall@5": 0.9459,
+      "recall@10": 0.9612,
+      "mrr@10": 0.9395,
+      "ndcg@10": 0.9313,
+      "p50_latency_ms": 255.6
+    }
+  ],
+  "results_by_kind": {
+    "known-item": [
+      {
+        "system": "keyword (Postgres FTS)",
+        "recall@5": 0.975,
+        "recall@10": 0.975,
+        "mrr@10": 0.9417,
+        "ndcg@10": 0.95,
+        "p50_latency_ms": 6.6
+      },
+      {
+        "system": "vector (pgvector)",
+        "recall@5": 0.975,
+        "recall@10": 1.0,
+        "mrr@10": 0.9661,
+        "ndcg@10": 0.9741,
+        "p50_latency_ms": 12.0
+      },
+      {
+        "system": "hybrid (RRF)",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.9708,
+        "ndcg@10": 0.9783,
+        "p50_latency_ms": 19.5
+      },
+      {
+        "system": "hybrid + cross-encoder rerank",
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "mrr@10": 0.9625,
+        "ndcg@10": 0.9715,
+        "p50_latency_ms": 272.6
+      }
+    ],
+    "topical": [
+      {
+        "system": "keyword (Postgres FTS)",
+        "recall@5": 0.5778,
+        "recall@10": 0.7333,
+        "mrr@10": 0.8519,
+        "ndcg@10": 0.7062,
+        "p50_latency_ms": 7.3
+      },
+      {
+        "system": "vector (pgvector)",
+        "recall@5": 0.7667,
+        "recall@10": 0.9333,
+        "mrr@10": 1.0,
+        "ndcg@10": 0.8911,
+        "p50_latency_ms": 10.8
+      },
+      {
+        "system": "hybrid (RRF)",
+        "recall@5": 0.7111,
+        "recall@10": 0.8222,
+        "mrr@10": 0.9444,
+        "ndcg@10": 0.8081,
+        "p50_latency_ms": 18.7
+      },
+      {
+        "system": "hybrid + cross-encoder rerank",
+        "recall@5": 0.7056,
+        "recall@10": 0.7889,
+        "mrr@10": 0.837,
+        "ndcg@10": 0.7522,
+        "p50_latency_ms": 231.7
+      }
+    ]
+  },
+  "per_query_ndcg": {
+    "k01": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k02": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k03": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k04": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k05": {
+      "keyword (Postgres FTS)": 0.5,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k06": {
+      "keyword (Postgres FTS)": 0.5,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 0.4307
+    },
+    "k07": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k08": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k09": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k10": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 0.3333,
+      "hybrid (RRF)": 0.5,
+      "hybrid + cross-encoder rerank": 0.4307
+    },
+    "k11": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k12": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k13": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k14": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k15": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k16": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k17": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k18": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k19": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k20": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k21": {
+      "keyword (Postgres FTS)": 0.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 0.6309,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k22": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k23": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k24": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k25": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k26": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k27": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 0.6309,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k28": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k29": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k30": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k31": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k32": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k33": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k34": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k35": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k36": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k37": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k38": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k39": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "k40": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "t01": {
+      "keyword (Postgres FTS)": 0.6367,
+      "vector (pgvector)": 1.0,
+      "hybrid (RRF)": 0.7495,
+      "hybrid + cross-encoder rerank": 0.3462
+    },
+    "t02": {
+      "keyword (Postgres FTS)": 0.9675,
+      "vector (pgvector)": 0.9675,
+      "hybrid (RRF)": 0.9675,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "t03": {
+      "keyword (Postgres FTS)": 0.1952,
+      "vector (pgvector)": 0.8106,
+      "hybrid (RRF)": 0.3591,
+      "hybrid + cross-encoder rerank": 0.8494
+    },
+    "t04": {
+      "keyword (Postgres FTS)": 0.8248,
+      "vector (pgvector)": 0.6992,
+      "hybrid (RRF)": 0.7227,
+      "hybrid + cross-encoder rerank": 0.8688
+    },
+    "t05": {
+      "keyword (Postgres FTS)": 1.0,
+      "vector (pgvector)": 0.9829,
+      "hybrid (RRF)": 1.0,
+      "hybrid + cross-encoder rerank": 1.0
+    },
+    "t06": {
+      "keyword (Postgres FTS)": 0.3183,
+      "vector (pgvector)": 0.9709,
+      "hybrid (RRF)": 0.9558,
+      "hybrid + cross-encoder rerank": 0.2742
+    },
+    "t07": {
+      "keyword (Postgres FTS)": 0.8358,
+      "vector (pgvector)": 0.8688,
+      "hybrid (RRF)": 0.8688,
+      "hybrid + cross-encoder rerank": 0.8688
+    },
+    "t08": {
+      "keyword (Postgres FTS)": 0.7598,
+      "vector (pgvector)": 0.9223,
+      "hybrid (RRF)": 0.8319,
+      "hybrid + cross-encoder rerank": 0.9494
+    },
+    "t09": {
+      "keyword (Postgres FTS)": 0.8175,
+      "vector (pgvector)": 0.7977,
+      "hybrid (RRF)": 0.8175,
+      "hybrid + cross-encoder rerank": 0.6131
+    }
+  }
+}
