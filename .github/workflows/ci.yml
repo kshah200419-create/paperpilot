@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (lint, types, tests, eval)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: paperpilot_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      TEST_DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/paperpilot_test
+      EMBEDDER: hashing # deterministic; CI never downloads models
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - name: Install
+        run: uv sync --frozen --extra dev
+      - name: Ruff
+        run: uv run ruff check . && uv run ruff format --check .
+      - name: Mypy (strict)
+        run: uv run mypy
+      - name: Tests (unit + Postgres integration)
+        run: uv run pytest --cov --cov-report=term --cov-report=xml
+      - name: Retrieval eval smoke test (hashing embedder)
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/paperpilot
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -c "CREATE DATABASE paperpilot"
+          uv run paperpilot db upgrade
+          uv run paperpilot seed
+          uv run paperpilot eval --output eval-hashing.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backend-reports
+          path: |
+            backend/coverage.xml
+            backend/eval-hashing.json
+
+  frontend:
+    name: Frontend (lint, types, tests, build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  docker:
+    name: Docker images build
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build compose images
+        run: PRELOAD_MODEL=false docker compose build
